@@ -1,5 +1,5 @@
 /**
- * Copyright © 2022, What the Weights!
+ * Copyright © 2022, What the Weights?!
  * Developer: Prashant Shrestha
  * Date: 2022-08-01
  */
@@ -40,7 +40,7 @@ body {
     );
     color: $color_grayblack;
     font: $fontsize_medium $default_font;
-    letter-spacing: .2px;
+    letter-spacing: 0.2px;
 }
 
 a,
@@ -73,6 +73,8 @@ a:visited {
     }
 }
 
+$test: #7e52aeb3;
+
 @mixin shadow($shades...) {
     box-shadow: $shades;
     -webkit-box-shadow: $shades;
@@ -84,7 +86,7 @@ a:visited {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 25px 30px;
+    padding: 15px 25px;
 
     .section {
         width: 100%;
@@ -103,7 +105,142 @@ a:visited {
             @include shadow(5px 5px 20px -15px $color_grayblack);
             cursor: pointer;
         }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+
+            .row {
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-flex-direction: row;
+                -ms-flex-direction: row;
+                flex-direction: row;
+                -webkit-flex-wrap: nowrap;
+                -ms-flex-wrap: nowrap;
+                flex-wrap: nowrap;
+                -webkit-justify-content: flex-start;
+                -ms-flex-pack: start;
+                justify-content: flex-start;
+                -webkit-align-content: flex-start;
+                -ms-flex-line-pack: start;
+                align-content: flex-start;
+                -webkit-align-items: center;
+                -ms-flex-align: center;
+                align-items: center;
+
+                .label,
+                .item {
+                    padding: 5px 10px;
+                }
+                .label {
+                    -webkit-order: 0;
+                    -ms-flex-order: 0;
+                    order: 0;
+                    -webkit-flex: 0 1 auto;
+                    -ms-flex: 0 1 auto;
+                    flex: 0 1 auto;
+                    -webkit-align-self: auto;
+                    -ms-flex-item-align: auto;
+                    align-self: auto;
+                    width: 130px;
+                    font-weight: bold;
+                    text-align: right;
+                }
+                .item {
+                    -webkit-order: 0;
+                    -ms-flex-order: 0;
+                    order: 0;
+                    -webkit-flex: 1 1 130px;
+                    -ms-flex: 1 1 130px;
+                    flex: 1 1 130px;
+                    -webkit-align-self: auto;
+                    -ms-flex-item-align: auto;
+                    align-self: auto;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-content: center;
+                    align-items: center;
+                    // justify-content: space-between;
+
+                    input[type="number"] {
+                        width: 100%;
+                        // height: 25px;
+                        font-size: $fontsize_large - 11px;
+                        font-weight: bold;
+                        padding: 5px 10px;
+                    }
+
+                    .item-item {
+                        margin: 3px 10px 3px 0;
+                    }
+                }
+            }
+        }
+
+        .bar-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 20px -10px 0 -10px;
+
+            .bar {
+                height: 20px;
+                background-color: $color_darkgrayish;
+            }
+
+            .bar:nth-of-type(1) {
+                width: 40%;
+            }
+            .bar:nth-of-type(2n) {
+                width: 30px;
+                background-color: $color_darkgrayish;
+                margin-right: 5px;
+            }
+
+            .plate {
+                display: flex;
+                align-content: center;
+                align-items: center;
+                justify-content: center;
+                color: $color_white;
+                text-align: center;
+                font-weight: bold;
+            }
+        }
+
+        .plate-labels {
+            display: flex;
+            width: 100%;
+            margin: 25px 0 5px 0;
+            align-items: center;
+            justify-content: center;
+
+            .plate-label {
+                width: 30px;
+                height: 30px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: $color_white;
+            }
+        }
     }
+}
+
+
+.footer {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 0 0 15px 0;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: .2px;
 }
 
 .text-title {
