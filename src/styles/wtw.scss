@@ -1,0 +1,121 @@
+/**
+ * Copyright © 2022, What the Weights!
+ * Developer: Prashant Shrestha
+ * Date: 2022-08-01
+ */
+
+/**
+ * Useful imports
+ */
+@import url("./reset.css");
+@import url("https://fonts.googleapis.com/css2?family=Catamaran:wght@400;500;700&display=swap");
+
+/**
+ * Fonts
+ */
+$font_roboto: "Catamaran", sans-serif;
+$fontsize_medium: 16px;
+$fontsize_large: 24px;
+
+$default_font: $font_roboto;
+
+/**
+ * Colors
+ */
+
+$color_grayblack: rgb(39, 41, 36);
+$color_white: rgb(248, 246, 245);
+$color_orange: rgb(213, 124, 66);
+$color_grayish: rgb(212, 213, 217);
+$color_blue: rgb(73, 97, 239);
+$color_darkgrayish: rgb(191, 191, 191);
+
+body {
+    // background-color: $color_grayish;
+    background: rgb(222, 224, 229);
+    background: linear-gradient(
+        90deg,
+        rgba(222, 224, 229, 1) 0%,
+        rgba(209, 211, 218, 1) 100%
+    );
+    color: $color_grayblack;
+    font: $fontsize_medium $default_font;
+    letter-spacing: .2px;
+}
+
+a,
+a:visited {
+    color: $color_orange;
+}
+
+/**
+ * Mixins
+ */
+@mixin breakpoint($class) {
+    @if $class == xs {
+        @media (max-width: 767px) {
+            @content;
+        }
+    } @else if $class == sm {
+        @media (min-width: 768px) {
+            @content;
+        }
+    } @else if $class == md {
+        @media (min-width: 992px) {
+            @content;
+        }
+    } @else if $class == lg {
+        @media (min-width: 1200px) {
+            @content;
+        }
+    } @else {
+        @warn "Breakpoint mixin supports: xs, sm, md, lg";
+    }
+}
+
+@mixin shadow($shades...) {
+    box-shadow: $shades;
+    -webkit-box-shadow: $shades;
+    -moz-box-shadow: $shades;
+}
+
+.main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 25px 30px;
+
+    .section {
+        width: 100%;
+        padding: 10px;
+        position: relative;
+        background-color: $color_white;
+        border-radius: 5px;
+        margin: 0 0 15px 0;
+        @include shadow(1px 1px 20px -15px $color_grayblack);
+
+        @include breakpoint(sm) {
+            max-width: 767px;
+        }
+
+        &:hover {
+            @include shadow(5px 5px 20px -15px $color_grayblack);
+            cursor: pointer;
+        }
+    }
+}
+
+.text-title {
+    font-family: $default_font;
+    font-size: $fontsize_medium;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.01px;
+}
+
+.text-paragraph {
+    font-size: $fontsize_medium - 3px;
+    font-weight: 500;
+    color: $color_darkgrayish;
+}
