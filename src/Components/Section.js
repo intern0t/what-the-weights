@@ -18,7 +18,7 @@ const Section = (props) => {
                     style={{
                         backgroundImage: `url(${WorkoutIcon})`,
                         backgroundPosition: "bottom right",
-                        backgroundSize: "45%",
+                        backgroundSize: "55%",
                         backgroundRepeat: "no-repeat",
                         position: "absolute",
                         left: "0",
@@ -28,7 +28,7 @@ const Section = (props) => {
                         width: "100%",
                         height: "100%",
                         zIndex: 0,
-                        opacity: ".5",
+                        opacity: ".3",
                     }}
                 />
             ) : null}
