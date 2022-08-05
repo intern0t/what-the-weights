@@ -1,29 +1,35 @@
+import React from "react";
+
+const generateKey = pre => {
+    return `${pre}_${new Date().getTime()}`;
+};
+
 const Bar = ({ weights }) => {
     const weightToHeightRatio = {
         45: {
             size: "200px",
-            color: "#0B7492",
+            color: "#0B7492"
         },
         25: {
             size: "160px",
-            color: "#83B5B4",
+            color: "#83B5B4"
         },
         10: {
             size: "125px",
-            color: "#d0be90",
+            color: "#d0be90"
         },
         5: {
             size: "90px",
-            color: "#D85537",
+            color: "#D85537"
         },
         2.5: {
             size: "65px",
-            color: "#383838b3",
+            color: "#383838b3"
         },
         1.5: {
             size: "50px",
-            color: "#7e52aeb3",
-        },
+            color: "#7e52aeb3"
+        }
     };
 
     if (weights && weights.constructor === Array && weights.length > 0) {
@@ -31,14 +37,18 @@ const Bar = ({ weights }) => {
             <>
                 <div className="bar-wrapper">
                     <div className="bar" />
-                    {weights.sort((x,y) => y -x).map((weight) => (
-                        <Plate
-                            key={`key-${weight}`}
-                            plateWeight={weight}
-                            plateSize={weightToHeightRatio[weight]["size"]}
-                            plateColor={weightToHeightRatio[weight]["color"]}
-                        />
-                    ))}
+                    {weights
+                        .sort((x, y) => y - x)
+                        .map(weight => (
+                            <Plate
+                                key={`key-${weight}-${generateKey(weight)}`}
+                                plateWeight={weight}
+                                plateSize={weightToHeightRatio[weight]["size"]}
+                                plateColor={
+                                    weightToHeightRatio[weight]["color"]
+                                }
+                            />
+                        ))}
                     <div className="bar" />
                 </div>
                 <div className="plate-labels">
@@ -46,12 +56,13 @@ const Bar = ({ weights }) => {
                         .sort((a, b) => {
                             return parseInt(b) - parseInt(a);
                         })
-                        .map((weight) => (
+                        .map(weight => (
                             <div
                                 className="plate-label"
                                 style={{
-                                    background: `${weightToHeightRatio[weight]["color"]}`,
+                                    background: `${weightToHeightRatio[weight]["color"]}`
                                 }}
+                                key={generateKey(weight)}
                             >
                                 {weight}
                             </div>
@@ -71,14 +82,13 @@ const Bar = ({ weights }) => {
 };
 
 const Plate = ({ plateWeight, plateSize, plateColor }) => {
-    console.log(plateWeight, plateSize, plateColor);
     return (
         <div
             className="plate"
             style={{
                 width: "25px",
                 height: plateSize,
-                backgroundColor: plateColor,
+                backgroundColor: plateColor
             }}
         >
             {`${plateWeight ? plateWeight : "-"}`}

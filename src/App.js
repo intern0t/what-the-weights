@@ -2,7 +2,7 @@ import "./styles/wtw.css";
 import Section from "./Components/Section";
 import Bar from "./Components/Bar";
 import Footer from "./Components/Footer";
-import { useState } from "react";
+import { React, useState } from "react";
 
 function App() {
     const [availableWeights, setAvailableWeights] = useState({
@@ -11,7 +11,7 @@ function App() {
         5: true,
         10: true,
         25: true,
-        45: true,
+        45: true
     });
 
     //State for Target and Bar Weight
@@ -21,83 +21,46 @@ function App() {
     });
 
     //State for plates
-    const [plates, setPlates] = useState([45,25,10,5,2.5]);
+    const [plates, setPlates] = useState([45, 25, 10, 5, 2.5]);
 
     //Updates Target Weight
-    const updateTargetWeight = (e) => {
-        if(e.key === "Enter") {
-            setInputs({...inputs,targetWeight: e.target.value});
-            console.log(inputs.targetWeight);
-        }
-    }
-    
+    const updateTargetWeight = e => {
+        setInputs({ ...inputs, targetWeight: e.target.value });
+    };
 
     //Updates Target Weight
-    const updateBarWeight = (e) => {
-        if(e.key === "Enter") {
-            setInputs({...inputs, barWeight: e.target.value}) 
-            console.log(inputs.barWeight);
-        }
-    }
-    
+    const updateBarWeight = e => {
+        setInputs({ ...inputs, barWeight: e.target.value });
+    };
+
     //Calculate number of each Weights needed
     const calculateWeights = () => {
-        let finalWeight = (inputs.targetWeight - inputs.barWeight)/2;
+        let finalWeight = (inputs.targetWeight - inputs.barWeight) / 2;
         let availablePlates = Object.keys(availableWeights);
         let valuePlates = Object.values(availableWeights);
         let actualWeights = [];
-        
 
-        
-        // console.log(availablePlates);
-        // console.log(valuePlates);
-        // console.log(Math.floor(115/45));
-        // console.log(Math.floor(25/25));
-
-        // console.log(finalWeight/45);
-        // 115 => 45,45,25
-        
-        while(finalWeight > 0) {
-            if(finalWeight - 45 >= 0){
+        while (finalWeight > 0) {
+            if (finalWeight - 45 >= 0) {
                 actualWeights.push(45);
                 finalWeight -= 45;
-            } else if(finalWeight - 25 >= 0){
-                actualWeights.push(25)
+            } else if (finalWeight - 25 >= 0) {
+                actualWeights.push(25);
                 finalWeight -= 25;
-            } else if(finalWeight - 10 >= 0){
-                actualWeights.push(10)
-                finalWeight -= 10;  
-            } else if(finalWeight - 5 >= 0){
-                actualWeights.push(5)
+            } else if (finalWeight - 10 >= 0) {
+                actualWeights.push(10);
+                finalWeight -= 10;
+            } else if (finalWeight - 5 >= 0) {
+                actualWeights.push(5);
                 finalWeight -= 5;
-            } else if(finalWeight - 2.5 >= 0){
-                actualWeights.push(2.5)
+            } else if (finalWeight - 2.5 >= 0) {
+                actualWeights.push(2.5);
                 finalWeight -= 2.5;
             }
-
         }
-        console.log(actualWeights); 
+
         setPlates(actualWeights);
-  
-        
-
-
-
-        // console.log(plates[0]);
-        // setPlates([actualWeights]);
-        // console.log("State;",plates);
-
-        // actualWeights.forEach(weight => console.log(weight));
-        // availablePlates.map(plate => console.log(parseInt(plate)));
-        // // availablePlates.map(plate =>{if(availableWeights[plate]) {
-        // //         if(plate)
-
-        // // }
-        // // })
-
-
-        }
-    
+    };
 
     return (
         <>
@@ -114,7 +77,8 @@ function App() {
                                 <input
                                     type="number"
                                     placeholder="Your target weight - 225, 310, etc"
-                                    onKeyDown = {updateTargetWeight} 
+                                    onChange={e => updateTargetWeight(e)}
+                                    value={inputs.targetWeight}
                                 />
                             </div>
                         </div>
@@ -124,7 +88,8 @@ function App() {
                                 <input
                                     type="number"
                                     placeholder="Your Bar weight - 45, 20 etc."
-                                    onKeyDown = {updateBarWeight}
+                                    onChange={updateBarWeight}
+                                    value={inputs.barWeight}
                                 />
                             </div>
                         </div>
@@ -138,7 +103,7 @@ function App() {
                                         name="weight1.5"
                                         value="2.5lb"
                                     />
-                                    <label for="weight1.5"> 2.5lb</label>
+                                    <label htmlFor="weight1.5"> 2.5lb</label>
                                 </div>
                                 <div className="item-item">
                                     <input
@@ -146,16 +111,17 @@ function App() {
                                         id="weight1.5"
                                         name="weight1.5"
                                         value="1.5lb"
-
                                     />
-                                    <label for="weight1.5"> 1.5lb</label>
+                                    <label htmlFor="weight1.5"> 1.5lb</label>
                                 </div>
                             </div>
                         </div>
-                        <button 
-                        onClick = {calculateWeights}
-                        style = {{width:"100px"}}>
-                        Calculate</button>
+                        <button
+                            onClick={calculateWeights}
+                            style={{ width: "100px" }}
+                        >
+                            Calculate
+                        </button>
                     </div>
                 </Section>
 
@@ -176,7 +142,7 @@ function App() {
                         className="text-title"
                         style={{
                             color: "rgb(248, 246, 245)",
-                            fontSize: "25px",
+                            fontSize: "25px"
                         }}
                     >
                         WHAT THE WEIGHTS?!
