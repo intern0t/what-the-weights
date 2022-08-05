@@ -1,8 +1,7 @@
 import React from "react";
 import WorkoutIcon from "../images/undraw_healthy_habit_bh-5-w.svg";
 
-const Section = (props) => {
-    const { initialHeight, backgroundImage, bg } = props;
+const Section = ({initialHeight, backgroundImage, bg, children}) => {
 
     return (
         <div
@@ -32,7 +31,7 @@ const Section = (props) => {
                     }}
                 />
             ) : null}
-            {props.children}
+            {children}
         </div>
     );
 };
