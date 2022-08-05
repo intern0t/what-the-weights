@@ -31,7 +31,7 @@ const Bar = ({ weights }) => {
             <>
                 <div className="bar-wrapper">
                     <div className="bar" />
-                    {weights.map((weight) => (
+                    {weights.sort((x,y) => y -x).map((weight) => (
                         <Plate
                             key={`key-${weight}`}
                             plateWeight={weight}
