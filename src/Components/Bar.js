@@ -1,8 +1,5 @@
 import React from "react";
-
-const generateKey = pre => {
-    return `${pre}_${new Date().getTime()}`;
-};
+import { nanoid } from "nanoid";
 
 const Bar = ({ weights }) => {
     const weightToHeightRatio = {
@@ -31,17 +28,16 @@ const Bar = ({ weights }) => {
             color: "#7e52aeb3"
         }
     };
-
-    if (weights && weights.constructor === Array && weights.length > 0) {
-        return (
-            <>
+    return (
+        <>
+            {weights && weights.length > 0 ? (
                 <div className="bar-wrapper">
                     <div className="bar" />
                     {weights
                         .sort((x, y) => y - x)
                         .map(weight => (
                             <Plate
-                                key={`key-${weight}-${generateKey(weight)}`}
+                                key={`key-${weight}-${nanoid()}`}
                                 plateWeight={weight}
                                 plateSize={weightToHeightRatio[weight]["size"]}
                                 plateColor={
@@ -51,34 +47,31 @@ const Bar = ({ weights }) => {
                         ))}
                     <div className="bar" />
                 </div>
-                <div className="plate-labels">
-                    {Object.keys(weightToHeightRatio)
-                        .sort((a, b) => {
-                            return parseInt(b) - parseInt(a);
-                        })
-                        .map(weight => (
-                            <div
-                                className="plate-label"
-                                style={{
-                                    background: `${weightToHeightRatio[weight]["color"]}`
-                                }}
-                                key={generateKey(weight)}
-                            >
-                                {weight}
-                            </div>
-                        ))}
-                </div>
-            </>
-        );
-    } else {
-        return (
-            <>
-                <div className="bar-wrapper">
-                    <div className="bar" />
-                </div>
-            </>
-        );
-    }
+            ) : null}
+            <div
+                className="plate-labels"
+                style={{
+                    margin: weights && weights.length > 0 ? "25px" : "0"
+                }}
+            >
+                {Object.keys(weightToHeightRatio)
+                    .sort((a, b) => {
+                        return parseInt(b) - parseInt(a);
+                    })
+                    .map(weight => (
+                        <div
+                            className="plate-label"
+                            style={{
+                                background: `${weightToHeightRatio[weight]["color"]}`
+                            }}
+                            key={nanoid()}
+                        >
+                            {weight}
+                        </div>
+                    ))}
+            </div>
+        </>
+    );
 };
 
 const Plate = ({ plateWeight, plateSize, plateColor }) => {
