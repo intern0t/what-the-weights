@@ -1,8 +1,6 @@
 import React from "react";
-import WorkoutIcon from "../images/undraw_healthy_habit_bh-5-w.svg";
 
-const Section = ({initialHeight, backgroundImage, bg, children}) => {
-
+const Section = ({initialHeight, backgroundImage, bg, children, icon}) => {
     return (
         <div
             className="section"
@@ -15,9 +13,9 @@ const Section = ({initialHeight, backgroundImage, bg, children}) => {
                 <div
                     className="backdrop"
                     style={{
-                        backgroundImage: `url(${WorkoutIcon})`,
+                        backgroundImage: `url(${icon})`,
                         backgroundPosition: "bottom right",
-                        backgroundSize: "55%",
+                        backgroundSize: "20%",
                         backgroundRepeat: "no-repeat",
                         position: "absolute",
                         left: "0",

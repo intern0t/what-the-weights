@@ -87,10 +87,11 @@ $test: #7e52aeb3;
     justify-content: center;
     align-items: center;
     padding: 15px 25px;
+    margin: 5px 20px;
 
     .section {
         width: 100%;
-        padding: 10px;
+        padding: 15px;
         position: relative;
         background-color: $color_white;
         border-radius: 5px;
@@ -184,20 +185,16 @@ $test: #7e52aeb3;
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
-            margin: 20px -10px 0 -10px;
+            margin: 20px -25px 0 -25px;
 
             .bar {
+                width: 30%;
                 height: 20px;
                 background-color: $color_darkgrayish;
-            }
 
-            .bar:nth-of-type(1) {
-                width: 40%;
-            }
-            .bar:nth-of-type(2n) {
-                width: 30px;
-                background-color: $color_darkgrayish;
-                margin-right: 5px;
+                &:nth-last-child(1) {
+                    width: 30px;
+                }
             }
 
             .plate {
@@ -231,7 +228,6 @@ $test: #7e52aeb3;
     }
 }
 
-
 .footer {
     display: flex;
     width: 100%;
@@ -240,7 +236,7 @@ $test: #7e52aeb3;
     padding: 0 0 15px 0;
     font-size: 13px;
     font-weight: bold;
-    letter-spacing: .2px;
+    letter-spacing: 0.2px;
 }
 
 .text-title {

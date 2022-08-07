@@ -1,8 +1,13 @@
+import React, { useEffect, useState } from "react";
 import "./styles/wtw.css";
 import Section from "./Components/Section";
 import Bar from "./Components/Bar";
 import Footer from "./Components/Footer";
-import { useState } from "react";
+import { isLocalStorageAvailable } from "./helpers/Cache";
+import { nanoid } from "nanoid";
+
+import WorkoutIcon from "./images/undraw_healthy_habit_bh-5-w.svg";
+import PersonalTrainerIcon from "./images/undraw_personal_trainer_re_cnua.svg";
 
 function App() {
     const [availableWeights, setAvailableWeights] = useState({
@@ -11,7 +16,7 @@ function App() {
         5: true,
         10: true,
         25: true,
-        45: true,
+        45: true
     });
 
     //State for Target and Bar Weight
@@ -21,83 +26,120 @@ function App() {
     });
 
     //State for plates
-    const [plates, setPlates] = useState([45,25,10,5,2.5]);
+    const [plates, setPlates] = useState([45, 25, 10, 5, 2.5]);
+
+    /**
+     * Updates the available weights|plates in our state to later utilize to calculate.
+     * @param {*} e Target elements, specifically checkbox inputs.
+     */
+    const updatePlatesAvailability = e => {
+        const { value, checked } = e.target || null;
+
+        if (value) {
+            const updatedAvailablePlates = {
+                ...availableWeights,
+                [value.replace("lbs", "")]: checked
+            };
+            setAvailableWeights(updatedAvailablePlates);
+
+            if (isLocalStorageAvailable()) {
+                localStorage.setItem(
+                    "available-plates",
+                    JSON.stringify(updatedAvailablePlates)
+                );
+            }
+        }
+    };
 
     //Updates Target Weight
-    const updateTargetWeight = (e) => {
-        if(e.key === "Enter") {
-            setInputs({...inputs,targetWeight: e.target.value});
-            console.log(inputs.targetWeight);
-        }
-    }
-    
+    const updateTargetWeight = e => {
+        setInputs({ ...inputs, targetWeight: e.target.value });
+    };
 
     //Updates Target Weight
-    const updateBarWeight = (e) => {
-        if(e.key === "Enter") {
-            setInputs({...inputs, barWeight: e.target.value}) 
-            console.log(inputs.barWeight);
+    const updateBarWeight = e => {
+        e.preventDefault();
+
+        setInputs({ ...inputs, barWeight: e.target.value });
+
+        if (isLocalStorageAvailable()) {
+            localStorage.setItem("bar-weight", e.target.value);
+            console.log(
+                `The bar-weight has been saved in local storage for later use.`
+            );
         }
-    }
-    
+    };
+
     //Calculate number of each Weights needed
-    const calculateWeights = () => {
-        let finalWeight = (inputs.targetWeight - inputs.barWeight)/2;
-        let availablePlates = Object.keys(availableWeights);
-        let valuePlates = Object.values(availableWeights);
+    const caculate = () => {
+        let finalWeight = (inputs.targetWeight - inputs.barWeight) / 2;
+        let availablePlates = Object.keys(availableWeights).filter(
+            k => availableWeights[k]
+        );
         let actualWeights = [];
-        
 
-        
-        // console.log(availablePlates);
-        // console.log(valuePlates);
-        // console.log(Math.floor(115/45));
-        // console.log(Math.floor(25/25));
+        console.log(availableWeights, availablePlates);
+        /**
+         * [ plates available ], filter with value = true (available)
+         *   -
+         *
+         */
 
-        // console.log(finalWeight/45);
-        // 115 => 45,45,25
-        
-        while(finalWeight > 0) {
-            if(finalWeight - 45 >= 0){
+        while (finalWeight > 0) {
+            if (finalWeight - 45 >= 0) {
                 actualWeights.push(45);
                 finalWeight -= 45;
-            } else if(finalWeight - 25 >= 0){
-                actualWeights.push(25)
+            } else if (finalWeight - 25 >= 0) {
+                actualWeights.push(25);
                 finalWeight -= 25;
-            } else if(finalWeight - 10 >= 0){
-                actualWeights.push(10)
-                finalWeight -= 10;  
-            } else if(finalWeight - 5 >= 0){
-                actualWeights.push(5)
+            } else if (finalWeight - 10 >= 0) {
+                actualWeights.push(10);
+                finalWeight -= 10;
+            } else if (finalWeight - 5 >= 0) {
+                actualWeights.push(5);
                 finalWeight -= 5;
-            } else if(finalWeight - 2.5 >= 0){
-                actualWeights.push(2.5)
+            } else if (finalWeight - 2.5 >= 0) {
+                actualWeights.push(2.5);
                 finalWeight -= 2.5;
+            } else if (finalWeight - 1.5 >= 0) {
+                actualWeights.push(1.5);
+                finalWeight -= 1.5;
+            }
+        }
+
+        setPlates(actualWeights);
+    };
+
+    const loadFromCache = () => {
+        if (isLocalStorageAvailable()) {
+            let barWeightFromLS = localStorage.getItem("bar-weight");
+            let availablePlatesFromLS = localStorage.getItem(
+                "available-plates"
+            );
+
+            if (barWeightFromLS) {
+                setInputs({ ...inputs, barWeight: parseInt(barWeightFromLS) });
+                console.log(
+                    `Got bar weight from local storage, ${barWeightFromLS}`
+                );
             }
 
+            if (availablePlatesFromLS) {
+                availablePlatesFromLS = JSON.parse(availablePlatesFromLS);
+                setAvailableWeights(availablePlatesFromLS);
+                console.log(
+                    `Got available plates from local storage.`,
+                    availablePlatesFromLS
+                );
+            }
+        } else {
+            console.log("No local storage available.");
         }
-        console.log(actualWeights); 
-        setPlates(actualWeights);
-  
-        
+    };
 
-
-
-        // console.log(plates[0]);
-        // setPlates([actualWeights]);
-        // console.log("State;",plates);
-
-        // actualWeights.forEach(weight => console.log(weight));
-        // availablePlates.map(plate => console.log(parseInt(plate)));
-        // // availablePlates.map(plate =>{if(availableWeights[plate]) {
-        // //         if(plate)
-
-        // // }
-        // // })
-
-
-        }
-    
+    useEffect(() => {
+        loadFromCache();
+    }, []);
 
     return (
         <>
@@ -105,6 +147,7 @@ function App() {
                 <Section
                     initialHeight="auto"
                     backgroundImage={false}
+                    icon={PersonalTrainerIcon}
                     bg="rgb(248, 246, 245)"
                 >
                     <div className="form">
@@ -114,7 +157,8 @@ function App() {
                                 <input
                                     type="number"
                                     placeholder="Your target weight - 225, 310, etc"
-                                    onKeyDown = {updateTargetWeight} 
+                                    onChange={e => updateTargetWeight(e)}
+                                    value={inputs.targetWeight}
                                 />
                             </div>
                         </div>
@@ -124,38 +168,57 @@ function App() {
                                 <input
                                     type="number"
                                     placeholder="Your Bar weight - 45, 20 etc."
-                                    onKeyDown = {updateBarWeight}
+                                    onChange={updateBarWeight}
+                                    value={inputs.barWeight}
                                 />
                             </div>
                         </div>
                         <div className="row">
-                            <div className="label">Available Weights</div>
+                            <div className="label">Available Plates</div>
                             <div className="item">
-                                <div className="item-item">
-                                    <input
-                                        type="checkbox"
-                                        id="weight1.5"
-                                        name="weight1.5"
-                                        value="2.5lb"
-                                    />
-                                    <label for="weight1.5"> 2.5lb</label>
-                                </div>
-                                <div className="item-item">
-                                    <input
-                                        type="checkbox"
-                                        id="weight1.5"
-                                        name="weight1.5"
-                                        value="1.5lb"
-
-                                    />
-                                    <label for="weight1.5"> 1.5lb</label>
-                                </div>
+                                {Object.keys(availableWeights)
+                                    .sort((a, b) => b - a)
+                                    .map(weight => {
+                                        return (
+                                            <div
+                                                className="item-item"
+                                                key={nanoid()}
+                                            >
+                                                <input
+                                                    type="checkbox"
+                                                    id={`weight-${weight}`}
+                                                    name={`weight-${weight}`}
+                                                    value={`${weight}lbs`}
+                                                    checked={
+                                                        availableWeights[
+                                                            `${weight}`
+                                                        ]
+                                                    }
+                                                    onChange={
+                                                        updatePlatesAvailability
+                                                    }
+                                                />
+                                                <label
+                                                    htmlFor={`weight-${weight}`}
+                                                >
+                                                    {`${weight}`}
+                                                </label>
+                                            </div>
+                                        );
+                                    })}
                             </div>
                         </div>
-                        <button 
-                        onClick = {calculateWeights}
-                        style = {{width:"100px"}}>
-                        Calculate</button>
+                        <div className="row">
+                            <div className="label"></div>
+                            <div className="item">
+                                <button
+                                    onClick={caculate}
+                                    style={{ width: "100px" }}
+                                >
+                                    Calculate
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </Section>
 
@@ -163,6 +226,7 @@ function App() {
                     initialHeight="auto"
                     backgroundImage={false}
                     bg="rgb(248, 246, 245)"
+                    icon={PersonalTrainerIcon}
                 >
                     <Bar weights={plates} />
                 </Section>
@@ -171,12 +235,13 @@ function App() {
                     initialHeight="auto"
                     backgroundImage={true}
                     bg="#4961EF"
+                    icon={WorkoutIcon}
                 >
                     <h1
                         className="text-title"
                         style={{
                             color: "rgb(248, 246, 245)",
-                            fontSize: "25px",
+                            fontSize: "25px"
                         }}
                     >
                         WHAT THE WEIGHTS?!
