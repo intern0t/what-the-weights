@@ -19,13 +19,16 @@ function App() {
         45: true
     });
 
-    //State for Target and Bar Weight
+    // To differentiate between kg/lb in our calculation.
+    const [usingPounds, setUsingPounds] = useState(true);
+
+    // State for Target and Bar Weight
     const [inputs, setInputs] = useState({
         targetWeight: 0,
         barWeight: 0
     });
 
-    //State for plates
+    // State for plates
     const [plates, setPlates] = useState([45, 25, 10, 5, 2.5]);
 
     /**
@@ -110,12 +113,16 @@ function App() {
         setPlates(actualWeights);
     };
 
+    /**
+     * Loads saved info from local storage.
+     */
     const loadFromCache = () => {
         if (isLocalStorageAvailable()) {
             let barWeightFromLS = localStorage.getItem("bar-weight");
             let availablePlatesFromLS = localStorage.getItem(
                 "available-plates"
             );
+            let metricSystem = localStorage.getItem("metric");
 
             if (barWeightFromLS) {
                 setInputs({ ...inputs, barWeight: parseInt(barWeightFromLS) });
@@ -132,6 +139,17 @@ function App() {
                     availablePlatesFromLS
                 );
             }
+
+            if (metricSystem) {
+                setUsingPounds(metricSystem.indexOf("lb") > -1 ? true : false);
+                console.log(
+                    `Got metric system to use from the local storage.`,
+                    metricSystem,
+                    typeof metricSystem,
+                    metricSystem === "lb",
+                    "lb".localeCompare(metricSystem)
+                );
+            }
         } else {
             console.log("No local storage available.");
         }
@@ -140,6 +158,21 @@ function App() {
     useEffect(() => {
         loadFromCache();
     }, []);
+
+    const updateMetricSystem = e => {
+        const { value } = e.target;
+
+        if (isLocalStorageAvailable()) {
+            localStorage.setItem("metric", JSON.stringify(value));
+            console.log(
+                `Set metric system to use ${
+                    value && value === "kg" ? "kilograms" : "pounds"
+                } and saved to local storage.`
+            );
+        }
+
+        setUsingPounds(value && value === "lb" ? true : false);
+    };
 
     return (
         <>
@@ -206,6 +239,20 @@ function App() {
                                             </div>
                                         );
                                     })}
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="label">Metric System</div>
+                            <div className="item">
+                                <select
+                                    name="metrics"
+                                    id="metrics"
+                                    onChange={updateMetricSystem}
+                                    value={usingPounds ? "lb" : "kg"}
+                                >
+                                    <option value={"lb"}>Pounds (lb)</option>
+                                    <option value={"kg"}>Kilograms (kg)</option>
+                                </select>
                             </div>
                         </div>
                         <div className="row">
