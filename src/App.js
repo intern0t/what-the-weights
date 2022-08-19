@@ -19,6 +19,15 @@ function App() {
         45: true
     });
 
+    const [availableWeightsInKg, setAvailableWeightsInKg] = useState({
+        1: true,
+        2: true,
+        5: true,
+        10: true,
+        15: true,
+        20: true
+    })
+
     // To differentiate between kg/lb in our calculation.
     const [usingPounds, setUsingPounds] = useState(true);
 
@@ -209,7 +218,7 @@ function App() {
                         <div className="row">
                             <div className="label">Available Plates</div>
                             <div className="item">
-                                {Object.keys(availableWeights)
+                                {Object.keys(usingPounds ? availableWeights : availableWeightsInKg)
                                     .sort((a, b) => b - a)
                                     .map(weight => {
                                         return (
